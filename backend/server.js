@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import { Server } from "socket.io";
 import http from "http";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -21,6 +22,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
+
+app.use("/api/auth", authRoutes);
 
 io.on("connection", (socket) => {
   console.log("A user connected");

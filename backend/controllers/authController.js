@@ -1,4 +1,4 @@
-const handleRegister = async (req, res) => {
+export const handleRegister = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const userExists = await User.findOne({ email });
@@ -17,7 +17,7 @@ const handleRegister = async (req, res) => {
   }
 };
 
-const handleLogin = async (req, res) => {
+export const handleLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -35,5 +35,3 @@ const handleLogin = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-export default { handleLogin, handleRegister };
