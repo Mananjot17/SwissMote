@@ -1,15 +1,38 @@
 // src/pages/AuthPage.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
+import useRegister from "../hooks/useRegister";
 
 const AuthPage = ({ type }) => {
   const isLogin = type === "login";
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
+
+  const { login, loading: loginLoading, error: loginError } = useLogin();
+  const {
+    register,
+    loading: registerLoading,
+    error: registerError,
+  } = useRegister();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLogin) {
+      await login(formData.email, formData.password);
+    } else {
+      await register(formData.fullname, formData.email, formData.password);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-50 to-blue-100">
-      <div className="flex flex-col sm:flex-row w-4/5 max-w-5xl rounded-lg overflow-hidden ">
+      <div className="flex flex-col sm:flex-row w-4/5 max-w-5xl rounded-lg overflow-hidden">
         {/* Left Section */}
-        <div className="sm:w-1/2 bg-gradient-to-br from-indigo-600 to-blue-500 text-white p-8 sm:flex flex-col hidden justify-center ">
+        <div className="sm:w-1/2 bg-gradient-to-br from-indigo-600 to-blue-500 text-white p-8 sm:flex flex-col hidden justify-center">
           <h1 className="text-4xl font-bold mb-4">
             {isLogin ? "Welcome Back!" : "Join Event Manager"}
           </h1>
@@ -30,7 +53,7 @@ const AuthPage = ({ type }) => {
           <h2 className="text-3xl font-semibold mb-6">
             {isLogin ? "Login to Event Manager" : "Register for Event Manager"}
           </h2>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {!isLogin && (
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -40,6 +63,11 @@ const AuthPage = ({ type }) => {
                   type="text"
                   placeholder="Enter your name"
                   className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
+                  value={formData.fullname}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullname: e.target.value })
+                  }
+                  required
                 />
               </div>
             )}
@@ -51,6 +79,11 @@ const AuthPage = ({ type }) => {
                 type="email"
                 placeholder="Enter your email"
                 className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                required
               />
             </div>
             <div>
@@ -61,6 +94,11 @@ const AuthPage = ({ type }) => {
                 type="password"
                 placeholder="Enter your password"
                 className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                required
               />
             </div>
             <button
@@ -70,6 +108,11 @@ const AuthPage = ({ type }) => {
               {isLogin ? "Login" : "Register"}
             </button>
           </form>
+          {(loginError || registerError) && (
+            <p className="mt-4 text-sm text-red-500">
+              {loginError || registerError}
+            </p>
+          )}
 
           <p className="mt-4 text-sm text-gray-600">
             {isLogin ? (
