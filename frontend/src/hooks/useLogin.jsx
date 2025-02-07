@@ -1,10 +1,12 @@
 // src/hooks/useLogin.js
 import { useState } from "react";
 import axios from "axios";
+import { useAuthContext } from "../context/AuthContext.jsx";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setAuthUser } = useAuthContext();
 
   const login = async (email, password) => {
     setLoading(true);
@@ -15,9 +17,15 @@ const useLogin = () => {
         {
           email,
           password,
+        },
+        {
+          withCredentials: true,
         }
       );
       console.log("Login successful:", response.data);
+
+      localStorage.setItem("user-data", JSON.stringify(response.data));
+      setAuthUser(response.data);
     } catch (err) {
       console.error(
         "Login failed:",

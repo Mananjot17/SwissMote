@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema(
   {
-    name: {
+    eventName: {
       type: String,
       required: true,
       trim: true,
@@ -17,10 +17,6 @@ const eventSchema = new mongoose.Schema(
       required: true,
     },
     time: {
-      type: String,
-      required: true,
-    },
-    location: {
       type: String,
       required: true,
     },
