@@ -2,15 +2,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { setAuthUser } = useAuthContext();
 
   const login = async (email, password) => {
     setLoading(true);
-    setError(null);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
@@ -22,22 +21,22 @@ const useLogin = () => {
           withCredentials: true,
         }
       );
-      console.log("Login successful:", response.data);
 
-      localStorage.setItem("user-data", JSON.stringify(response.data));
-      setAuthUser(response.data);
-    } catch (err) {
-      console.error(
-        "Login failed:",
-        err.response?.data?.message || err.message
-      );
-      setError(err.response?.data?.message || "An error occurred.");
+      const data = response.data;
+      console.log("Login successful:", data);
+
+      localStorage.setItem("user-data", JSON.stringify(data));
+      setAuthUser(data);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An error occurred. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  return { login, loading, error };
+  return { login, loading };
 };
 
 export default useLogin;

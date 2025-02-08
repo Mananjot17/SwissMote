@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
+import useLogout from "../hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 
 const DashboardHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { logout, loading, error } = useLogout();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
   };
 
-  const handleLogout = () => {
-    console.log("Logged out!");
-    // Add your logout logic here
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (

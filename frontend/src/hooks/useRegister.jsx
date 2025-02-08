@@ -2,15 +2,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 const useRegister = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { setAuthUser } = useAuthContext();
 
   const register = async (fullname, email, password) => {
     setLoading(true);
-    setError(null);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/register",
@@ -24,23 +23,22 @@ const useRegister = () => {
         }
       );
 
-      console.log("Registration successful:", response.data);
+      const data = response.data;
+      console.log("Registration successful:", data);
 
-      localStorage.setItem("user-data", JSON.stringify(response.data));
-      setAuthUser(response.data);
+      localStorage.setItem("user-data", JSON.stringify(data));
+      setAuthUser(data);
       // Handle successful registration
-    } catch (err) {
-      console.error(
-        "Registration failed:",
-        err.response?.data?.message || err.message
-      );
-      setError(err.response?.data?.message || "An error occurred.");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An error occurred. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  return { register, loading, error };
+  return { register, loading };
 };
 
 export default useRegister;

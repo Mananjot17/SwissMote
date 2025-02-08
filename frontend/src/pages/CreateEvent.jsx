@@ -1,5 +1,5 @@
 import React, { use, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCreateEvent from "../hooks/useCreateEvent";
 
 const CreateEventForm = ({ onClose }) => {
@@ -129,13 +129,15 @@ const CreateEventForm = ({ onClose }) => {
           </div>
 
           <div className="flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4">
-            <button
-              type="button"
-              className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
+            <Link to="/">
+              <button
+                type="button"
+                className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+            </Link>
             <button
               type="submit"
               className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition"

@@ -8,32 +8,6 @@ import DashboardHeader from "../components/DashboardHeader";
 const Dashboard = () => {
   const [events, setEvents] = useState([]);
 
-  //   useEffect(() => {
-  //     fetchEvents();
-  //   }, []);
-
-  //   const fetchEvents = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${import.meta.env.VITE_API_URL}/events`
-  //       );
-  //       setEvents(response.data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch events", error);
-  //     }
-  //   };
-
-  const handleDelete = async (eventId) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/events/${eventId}`);
-        setEvents(events.filter((event) => event._id !== eventId));
-      } catch (error) {
-        console.error("Failed to delete event", error);
-      }
-    }
-  };
-
   const upcomingEvents = events.filter(
     (event) => new Date(event.date) > new Date()
   );

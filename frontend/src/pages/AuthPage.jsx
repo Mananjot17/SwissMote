@@ -12,12 +12,8 @@ const AuthPage = ({ type }) => {
     password: "",
   });
 
-  const { login, loading: loginLoading, error: loginError } = useLogin();
-  const {
-    register,
-    loading: registerLoading,
-    error: registerError,
-  } = useRegister();
+  const { login, loading: loginLoading } = useLogin();
+  const { register, loading: registerLoading } = useRegister();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -108,12 +104,6 @@ const AuthPage = ({ type }) => {
               {isLogin ? "Login" : "Register"}
             </button>
           </form>
-          {(loginError || registerError) && (
-            <p className="mt-4 text-sm text-red-500">
-              {loginError || registerError}
-            </p>
-          )}
-
           <p className="mt-4 text-sm text-gray-600">
             {isLogin ? (
               <>
