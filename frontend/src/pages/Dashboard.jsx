@@ -6,9 +6,8 @@ import useFetchEvents from "../hooks/useFetchEvents";
 const Dashboard = () => {
   const { events, loading, error, loadMore, updateFilters } = useFetchEvents();
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e) =>
     updateFilters({ [e.target.name]: e.target.value });
-  };
 
   const upcomingEvents = events.filter(
     (event) => new Date(event.date) > new Date()
@@ -18,25 +17,22 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-50 to-blue-100">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-r from-indigo-50 to-blue-100 pt-16">
       <DashboardHeader />
-
-      {/* Main Content */}
-      <div className="p-8">
-        {/* Create New Event Button */}
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-semibold">My Events</h2>
+      <div className="p-10 max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex justify-between items-center mb-12">
+          <h2 className="text-4xl font-bold text-indigo-700">My Events</h2>
           <Link
             to="/create-event"
-            className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+            className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow hover:bg-indigo-700 transition"
           >
             Create New Event
           </Link>
         </div>
 
         {/* Filters */}
-        <div className="mb-8 flex gap-6">
+        <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Category:
@@ -71,71 +67,62 @@ const Dashboard = () => {
         </div>
 
         {/* Upcoming Events */}
-        <section className="mb-12">
-          <h3 className="text-lg font-semibold text-indigo-700 mb-4">
-            Upcoming Events
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))
-            ) : (
-              <p>No upcoming events.</p>
-            )}
-          </div>
-        </section>
+        <EventSection title="Upcoming Events" events={upcomingEvents} />
 
         {/* Past Events */}
-        <section>
-          <h3 className="text-lg font-semibold text-indigo-700 mb-4">
-            Past Events
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {pastEvents.length > 0 ? (
-              pastEvents.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))
-            ) : (
-              <p>No past events.</p>
-            )}
-          </div>
-        </section>
+        <EventSection title="Past Events" events={pastEvents} />
 
         {/* Load More Button */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-10 flex justify-center">
           {loading ? (
             <p>Loading...</p>
           ) : (
             <button
               onClick={loadMore}
-              className="bg-indigo-600 text-white py-2 px-6 rounded-md hover:bg-indigo-700"
+              className="bg-indigo-600 text-white py-2 px-8 rounded-lg shadow hover:bg-indigo-700 transition"
             >
               Load More
             </button>
           )}
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       </div>
     </div>
   );
 };
 
+const EventSection = ({ title, events }) => (
+  <section className="mb-16">
+    <h3 className="text-2xl font-semibold text-indigo-700 mb-6">{title}</h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {events.length > 0 ? (
+        events.map((event) => <EventCard key={event._id} event={event} />)
+      ) : (
+        <p className="text-gray-600">No events found.</p>
+      )}
+    </div>
+  </section>
+);
+
 const EventCard = ({ event }) => (
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <h4 className="text-xl font-bold mb-2">{event.name}</h4>
-    <p className="text-gray-700 mb-2">{event.description}</p>
+  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+    <h4 className="text-xl font-bold text-indigo-800 mb-2">
+      {event.eventName}
+    </h4>
+    <p className="text-gray-700 mb-4">{event.description}</p>
     <p className="text-gray-500 text-sm mb-4">
       {new Date(event.date).toLocaleString()}
     </p>
     <div className="flex justify-between">
       <Link
         to={`/events/${event._id}/edit`}
-        className="text-indigo-600 hover:underline"
+        className="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600 transition"
       >
         Update
       </Link>
-      <button className="text-red-600 hover:underline">Delete</button>
+      <button className="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition">
+        Delete
+      </button>
     </div>
   </div>
 );
