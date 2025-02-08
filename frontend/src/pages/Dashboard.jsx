@@ -2,12 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import DashboardHeader from "../components/DashboardHeader";
 import useFetchEvents from "../hooks/useFetchEvents";
+import EventSection from "../components/EventSection";
 
 const Dashboard = () => {
   const { events, loading, error, loadMore, updateFilters } = useFetchEvents();
 
   const handleFilterChange = (e) =>
     updateFilters({ [e.target.name]: e.target.value });
+
+  // Handle event deletion
+  const handleDeleteEvent = (eventId) => {
+    updateFilters({}); // Re-fetch with current filters or update local state if using optimistic update
+  };
 
   const upcomingEvents = events.filter(
     (event) => new Date(event.date) > new Date()
@@ -67,10 +73,18 @@ const Dashboard = () => {
         </div>
 
         {/* Upcoming Events */}
-        <EventSection title="Upcoming Events" events={upcomingEvents} />
+        <EventSection
+          title="Upcoming Events"
+          events={upcomingEvents}
+          onDeleteEvent={handleDeleteEvent} // Pass delete handler
+        />
 
         {/* Past Events */}
-        <EventSection title="Past Events" events={pastEvents} />
+        <EventSection
+          title="Past Events"
+          events={pastEvents}
+          onDeleteEvent={handleDeleteEvent} // Pass delete handler
+        />
 
         {/* Load More Button */}
         <div className="mt-10 flex justify-center">
@@ -90,41 +104,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-const EventSection = ({ title, events }) => (
-  <section className="mb-16">
-    <h3 className="text-2xl font-semibold text-indigo-700 mb-6">{title}</h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {events.length > 0 ? (
-        events.map((event) => <EventCard key={event._id} event={event} />)
-      ) : (
-        <p className="text-gray-600">No events found.</p>
-      )}
-    </div>
-  </section>
-);
-
-const EventCard = ({ event }) => (
-  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-    <h4 className="text-xl font-bold text-indigo-800 mb-2">
-      {event.eventName}
-    </h4>
-    <p className="text-gray-700 mb-4">{event.description}</p>
-    <p className="text-gray-500 text-sm mb-4">
-      {new Date(event.date).toLocaleString()}
-    </p>
-    <div className="flex justify-between">
-      <Link
-        to={`/events/${event._id}/edit`}
-        className="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600 transition"
-      >
-        Update
-      </Link>
-      <button className="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition">
-        Delete
-      </button>
-    </div>
-  </div>
-);
 
 export default Dashboard;
