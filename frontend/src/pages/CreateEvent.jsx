@@ -11,14 +11,7 @@ const CreateEventForm = ({ onClose }) => {
     description: "",
   });
 
-  const categories = [
-    "Conference",
-    "Workshop",
-    "Networking Event",
-    "Meetup",
-    "Webinar",
-    "Other",
-  ];
+  const categories = ["Conference", "Workshop", "Meetup", "Webinar", "Other"];
 
   const navigate = useNavigate();
   const { createEvent, loading, error } = useCreateEvent();
@@ -29,14 +22,7 @@ const CreateEventForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = await createEvent(formData);
-
-      console.log(data);
-      navigate("/"); // Navigate to the dashboard after successful event creation
-    } catch (err) {
-      console.error("Failed to create event:", err);
-    }
+    await createEvent(formData);
   };
 
   return (

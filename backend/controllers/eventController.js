@@ -1,6 +1,6 @@
 import Event from "../models/Events.js";
 
-const createEvent = async (req, res) => {
+export const createEvent = async (req, res) => {
   try {
     const { eventName, description, date, time, category } = req.body;
     const userId = req.user._id;
@@ -46,4 +46,38 @@ const createEvent = async (req, res) => {
   }
 };
 
-export default createEvent;
+// eventsController.js
+export const getEvents = async (req, res) => {
+  const { page = 1, limit = 5, category, dateFilter } = req.query;
+
+  const query = {};
+
+  // Category Filter
+  if (category) query.category = category;
+
+  // Date Filter
+  if (dateFilter === "upcoming") {
+    query.date = { $gte: new Date() };
+  } else if (dateFilter === "past") {
+    query.date = { $lt: new Date() };
+  }
+
+  try {
+    const events = await Event.find(query)
+      .sort({ date: 1 }) // Sort by date
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    const total = await Event.countDocuments(query);
+
+    res.json({
+      events,
+      total,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

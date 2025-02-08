@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const useCreateEvent = () => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const createEvent = async (eventData) => {
     try {
@@ -13,7 +15,9 @@ const useCreateEvent = () => {
         eventData,
         { withCredentials: true }
       );
-      return response.data; // Return the response to handle navigation outside the hook
+
+      navigate("/");
+      // Return the response to handle navigation outside the hook
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "An error occurred. Please try again.";
