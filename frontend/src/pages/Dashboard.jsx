@@ -30,7 +30,7 @@ const Dashboard = () => {
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-4xl font-bold text-indigo-700">My Events</h2>
           <Link
-            to="/create-event"
+            to="/events/create-event"
             className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow hover:bg-indigo-700 transition"
           >
             Create New Event

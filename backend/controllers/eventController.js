@@ -100,3 +100,55 @@ export const deleteEvent = async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
+
+export const updateEvent = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const event = await Event.findById(id); // Fetch the existing document
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Create an update object with only changed fields
+    const changedFields = {};
+    for (const key in updates) {
+      if (updates[key] !== event[key]) {
+        changedFields[key] = updates[key];
+      }
+    }
+
+    // Only update if there are changed fields
+    if (Object.keys(changedFields).length > 0) {
+      const updatedEvent = await Event.findByIdAndUpdate(
+        id,
+        { $set: changedFields },
+        { new: true, runValidators: true }
+      );
+      return res.json(updatedEvent);
+    } else {
+      return res.status(400).json({ message: "No changes detected" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getEvent = async (req, res) => {
+  const { id } = req.params; // Extracting the event ID from the request params
+
+  try {
+    const event = await Event.findById(id);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json(event); // Return the event if found
+  } catch (error) {
+    console.error("Error fetching the event:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};

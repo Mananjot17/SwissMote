@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import CreateEvent from "./pages/CreateEvent.jsx";
 import { useAuthContext } from "./context/AuthContext.jsx";
 import { Toaster } from "react-hot-toast";
+import UpdateEvent from "./pages/UpdateEvent.jsx";
 
 const App = () => {
   const { authUser } = useAuthContext();
@@ -27,8 +28,12 @@ const App = () => {
           }
         />
         <Route
-          path="/create-event"
+          path="/events/create-event"
           element={authUser ? <CreateEvent /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/events/:id/edit"
+          element={authUser ? <UpdateEvent /> : <Navigate to="/login" />}
         />
       </Routes>
       <Toaster />
