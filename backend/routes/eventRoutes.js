@@ -5,6 +5,7 @@ import {
   getEvent,
   getEvents,
   updateEvent,
+  joinEvent,
 } from "../controllers/eventController.js";
 import protectRoute from "../middleware/protectRoute.js";
 
@@ -15,5 +16,6 @@ router.get("/", protectRoute, getEvents);
 router.delete("/:id", protectRoute, deleteEvent);
 router.put("/:id", protectRoute, updateEvent);
 router.get("/:id", protectRoute, getEvent);
+router.post("/:id/join", protectRoute, joinEvent);
 
 export default router;

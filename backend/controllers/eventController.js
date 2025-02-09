@@ -1,4 +1,5 @@
 import Event from "../models/Events.js";
+import { io } from "../server.js";
 
 export const createEvent = async (req, res) => {
   try {
@@ -150,5 +151,38 @@ export const getEvent = async (req, res) => {
   } catch (error) {
     console.error("Error fetching the event:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+export const joinEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user.id;
+    const event = await Event.findById(eventId);
+
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    const alreadyJoined = event.attendees.some(
+      (attendee) => attendee.userId.toString() === userId
+    );
+
+    if (alreadyJoined) {
+      return res
+        .status(400)
+        .json({ message: "You have already joined this event" });
+    }
+
+    event.attendees.push({ userId, joinedAt: new Date() });
+    await event.save();
+
+    const updatedEvent = await Event.findById(eventId); // Fetch updated event
+    io.to(eventId).emit("attendeeUpdate", updatedEvent.attendees.length);
+
+    res.status(200).json({
+      message: "Successfully joined the event",
+      attendees: event.attendees.length,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
 };
