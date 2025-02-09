@@ -5,7 +5,7 @@ import useJoinEvent from "../hooks/useJoinEvent"; // Custom hook for joining eve
 import { io } from "socket.io-client"; // Socket.io client for real-time updates
 
 // Initialize socket connection (make sure the server is running at this address)
-const socket = io("http://localhost:5000");
+const socket = io("https://swissmote-pthp.onrender.com");
 
 const EventCard = ({ event, onDelete }) => {
   // Custom hook to handle event deletion
