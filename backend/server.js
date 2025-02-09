@@ -52,7 +52,7 @@ const server = http.createServer(app);
 // WebSocket setup
 const io = new Server(server, {
   cors: {
-    origin: "https://swiss-mote.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   },
 });
@@ -61,7 +61,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://swiss-mote.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
