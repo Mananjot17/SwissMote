@@ -12,7 +12,7 @@ const useCreateEvent = () => {
     try {
       setLoading(true); // Start loading before the request
       const response = await axios.post(
-        "http://localhost:5000/events/create-event", // Backend endpoint to create an event
+        `${import.meta.env.VITE_API_URL}events/create-event`, // Backend endpoint to create an event
         eventData, // Event data sent in the request body
         { withCredentials: true } // Include credentials for authentication (cookies, tokens)
       );

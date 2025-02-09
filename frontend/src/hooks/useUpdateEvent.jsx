@@ -12,7 +12,7 @@ const useUpdateEvent = () => {
     try {
       // Send a PUT request to update the event
       const response = await axios.put(
-        `http://localhost:5000/events/${id}`, // Backend endpoint for updating the event
+        `${import.meta.env.VITE_API_URL}events/${id}`, // Backend endpoint for updating the event
         updatedData, // Data to update the event with
         {
           withCredentials: true, // Include credentials for authentication (cookies, tokens)

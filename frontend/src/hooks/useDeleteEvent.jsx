@@ -9,7 +9,7 @@ const useDeleteEvent = () => {
   const deleteEvent = async (eventId) => {
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:5000/events/${eventId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}events/${eventId}`, {
         withCredentials: true,
       }); // Replace with your API endpoint
     } catch (error) {

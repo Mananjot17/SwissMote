@@ -17,7 +17,7 @@ const useLogout = () => {
     try {
       // Send POST request to the logout endpoint
       await axios.post(
-        "http://localhost:5000/api/auth/logout", // Backend logout endpoint
+        `${import.meta.env.VITE_API_URL}api/auth/logout`, // Backend logout endpoint
         {},
         {
           withCredentials: true, // Include credentials (e.g., cookies) for proper logout

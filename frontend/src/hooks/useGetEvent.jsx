@@ -11,9 +11,12 @@ const useGetEvent = () => {
     setLoading(true); // Set loading state to true before starting the request
     try {
       // Send a GET request to fetch the event by its ID
-      const response = await axios.get(`http://localhost:5000/events/${id}`, {
-        withCredentials: true, // Include credentials for authentication (cookies, tokens)
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}events/${id}`,
+        {
+          withCredentials: true, // Include credentials for authentication (cookies, tokens)
+        }
+      );
 
       return response.data; // Return the event data if the request is successful
     } catch (error) {

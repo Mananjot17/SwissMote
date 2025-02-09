@@ -17,10 +17,13 @@ const useFetchEvents = (initialFilters = {}) => {
       setLoading(true);
       setError(null); // Clear previous error before making a new request
       try {
-        const response = await axios.get("http://localhost:5000/events", {
-          params: { ...filters, page, limit: 5 }, // Apply filters and pagination
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}events`,
+          {
+            params: { ...filters, page, limit: 5 }, // Apply filters and pagination
+            withCredentials: true,
+          }
+        );
 
         if (!cancelRequest) {
           const fetchedEvents = response.data.events;

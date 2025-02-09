@@ -12,7 +12,7 @@ const useJoinEvent = () => {
     try {
       // Send a POST request to join the event
       const response = await axios.post(
-        `http://localhost:5000/events/${eventId}/join`, // Backend endpoint for joining the event
+        `${import.meta.env.VITE_API_URL}events/${eventId}/join`, // Backend endpoint for joining the event
         {}, // Empty request body (can be extended if needed)
         { withCredentials: true } // Include credentials for authentication
       );

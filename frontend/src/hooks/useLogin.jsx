@@ -15,7 +15,7 @@ const useLogin = () => {
     try {
       // Send POST request to the login endpoint with email and password
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login", // Backend login endpoint
+        `${import.meta.env.VITE_API_URL}api/auth/login`, // Backend login endpoint
         {
           email, // User's email
           password, // User's password

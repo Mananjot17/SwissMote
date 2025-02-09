@@ -15,7 +15,7 @@ const useRegister = () => {
     try {
       // Send POST request to the registration endpoint
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register", // Backend registration endpoint
+        `${import.meta.env.VITE_API_URL}api/auth/register`, // Backend registration endpoint
         {
           fullname, // User's full name
           email, // User's email
