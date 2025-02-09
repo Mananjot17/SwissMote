@@ -1,5 +1,5 @@
-import React, { use, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useCreateEvent from "../hooks/useCreateEvent";
 
 const CreateEventForm = ({ onClose }) => {
@@ -12,7 +12,6 @@ const CreateEventForm = ({ onClose }) => {
   });
 
   const categories = ["Conference", "Workshop", "Meetup", "Webinar", "Other"];
-
   const navigate = useNavigate();
   const { createEvent, loading, error } = useCreateEvent();
 
@@ -22,7 +21,10 @@ const CreateEventForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createEvent(formData);
+    const success = await createEvent(formData);
+    if (success) {
+      navigate("/"); // Redirect to home on success
+    }
   };
 
   return (
@@ -31,6 +33,13 @@ const CreateEventForm = ({ onClose }) => {
         <h2 className="text-2xl md:text-3xl font-semibold text-indigo-700 mb-6 text-center md:text-left">
           Create New Event
         </h2>
+
+        {error && (
+          <div className="mb-4 text-red-600 bg-red-100 p-3 rounded-md">
+            {error}
+          </div>
+        )}
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="col-span-1">
@@ -115,20 +124,21 @@ const CreateEventForm = ({ onClose }) => {
           </div>
 
           <div className="flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4">
-            <Link to="/">
-              <button
-                type="button"
-                className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-            </Link>
+            <button
+              type="button"
+              className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition"
+              onClick={() => (onClose ? onClose() : navigate("/"))}
+            >
+              Cancel
+            </button>
             <button
               type="submit"
-              className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition"
+              className={`bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={loading}
             >
-              Create Event
+              {loading ? "Creating..." : "Create Event"}
             </button>
           </div>
         </form>

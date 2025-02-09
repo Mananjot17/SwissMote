@@ -1,33 +1,34 @@
 // src/pages/AuthPage.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import useLogin from "../hooks/useLogin";
-import useRegister from "../hooks/useRegister";
+import useLogin from "../hooks/useLogin"; // Custom hook for handling login
+import useRegister from "../hooks/useRegister"; // Custom hook for handling registration
 
 const AuthPage = ({ type }) => {
-  const isLogin = type === "login";
+  const isLogin = type === "login"; // Check if the current page is for login or register
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
     password: "",
   });
 
-  const { login, loading: loginLoading } = useLogin();
-  const { register, loading: registerLoading } = useRegister();
+  const { login, loading: loginLoading } = useLogin(); // Hook to handle login logic
+  const { register, loading: registerLoading } = useRegister(); // Hook to handle registration logic
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
-      await login(formData.email, formData.password);
+      await login(formData.email, formData.password); // Call login hook if login form
     } else {
-      await register(formData.fullname, formData.email, formData.password);
+      await register(formData.fullname, formData.email, formData.password); // Call register hook if registration form
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-50 to-blue-100">
       <div className="flex flex-col sm:flex-row w-4/5 max-w-5xl rounded-lg overflow-hidden">
-        {/* Left Section */}
+        {/* Left Section - Info Panel */}
         <div className="sm:w-1/2 bg-gradient-to-br from-indigo-600 to-blue-500 text-white p-8 sm:flex flex-col hidden justify-center">
           <h1 className="text-4xl font-bold mb-4">
             {isLogin ? "Welcome Back!" : "Join Event Manager"}
@@ -44,7 +45,7 @@ const AuthPage = ({ type }) => {
           </ul>
         </div>
 
-        {/* Right Section - Form */}
+        {/* Right Section - Form Panel */}
         <div className="sm:w-1/2 bg-white p-12">
           <h2 className="text-3xl font-semibold mb-6">
             {isLogin ? "Login to Event Manager" : "Register for Event Manager"}
@@ -99,7 +100,10 @@ const AuthPage = ({ type }) => {
             </div>
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition"
+              className={`w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition ${
+                (isLogin ? loginLoading : registerLoading) ? "opacity-50" : ""
+              }`}
+              disabled={isLogin ? loginLoading : registerLoading}
             >
               {isLogin ? "Login" : "Register"}
             </button>
